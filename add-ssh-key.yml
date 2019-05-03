@@ -1,0 +1,32 @@
+---
+# tasks file for digital_ocean
+- name: Adding local SSH key to DigitalOcean account
+  hosts: localhost
+  connection: local
+  become: no
+
+  tasks:
+        - name: Check if vars/private.yml is present
+          stat: path={{ playbook_dir }}/vars/private.yml
+          register: private_vars
+
+        - name: Include private variables
+          include_vars:
+            file: vars/private.yml
+          when: private_vars.stat.exists == true
+
+        - name: Add SSH key to DigitalOcean account
+          ignore_errors: yes
+          digital_ocean:
+            state: present
+            command: ssh
+            name: "Ansible SSH key"
+            ssh_pub_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+            api_token: "{{ do_api_token }}"
+            #register: droplet
+
+        - debug:
+            msg: "ID is {{ droplet.droplet.id }}"
+
+        - debug:
+            msg: "IP is {{ droplet.droplet.ip_address }}"
