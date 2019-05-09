@@ -1,0 +1,12 @@
+---
+# Building in prompts
+#server_hostname: 
+
+server_domain: 
+
+do_api_token: 
+
+do_size_id: s-1vcpu-1gb
+do_region_id: nyc3
+do_image_id: fedora-30-x64
+do_ssh_keys: 24116044,24331192

@@ -1,0 +1,62 @@
+---
+# tasks file for basic_setup
+- name: Assert supported distribution
+  assert:
+    that:
+      - "ansible_pkg_mgr in ('apt', 'yum', 'dnf', 'zypper', 'homebrew')"
+
+- name: Check if vars/private.yml is present
+  stat: path={{ role_path }}/vars/private.yml
+  register: private_vars
+
+- name: Include private variables
+  include_vars:
+    file: vars/private.yml
+  when: private_vars.stat.exists == true
+
+- set_fact:
+    server_fqdn: "{{ server_hostname }}.{{ server_domain }}"
+
+- name: Running system updates
+  package:
+    name: '*'
+    state: latest
+
+- name: 'Perform distribution specific tasks ({{ ansible_pkg_mgr }})'
+  include_tasks: 'tasks-{{ ansible_pkg_mgr }}.yml'
+
+- name: Set the timezone for the server to be UTC
+  command: timedatectl set-timezone 'America/New_York'
+    
+- name: Set up a unique hostname
+  hostname: name={{ server_hostname }}
+
+- name: Add the server's domain to the hosts file
+  lineinfile: dest=/etc/hosts
+              regexp='.*{{ item }}$'
+              line="{{ hostvars[item].ansible_default_ipv4.address }} {{ server_fqdn }} {{ server_hostname }}"
+              state=present
+  when: hostvars[item].ansible_default_ipv4.address is defined
+  with_items: "{{ groups['server'] }}"
+
+- name: Create a secondary, non-root user
+  user: name={{ normal_user_name }}
+       password='{{ normal_user_password }}'
+       shell=/bin/bash
+
+- name: Add remote authorized key to allow future passwordless logins
+  authorized_key: user={{ normal_user_name }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+
+- name: Add normal user to sudoers
+  lineinfile: dest=/etc/sudoers
+              line="{{ normal_user_name }} ALL=(ALL) ALL"
+              state=present
+
+- name: Configure SSH daemon
+  copy: src=files/ssh/sshd_config dest=/etc/ssh/sshd_config
+  notify: restart ssh
+
+- name: Restart SSH daemon
+  service: 
+    name: sshd
+    state: restarted

@@ -1,4 +1,6 @@
 ---
+# This playbook is currently half functional due to changes in DO API
+# SSH key id is not registered due to an error being thrown.
 # tasks file for digital_ocean
 - name: Adding local SSH key to DigitalOcean account
   hosts: localhost
@@ -16,17 +18,17 @@
           when: private_vars.stat.exists == true
 
         - name: Add SSH key to DigitalOcean account
-          ignore_errors: yes
+          #ignore_errors: yes
           digital_ocean:
             state: present
             command: ssh
             name: "Ansible SSH key"
             ssh_pub_key: "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
             api_token: "{{ do_api_token }}"
-            #register: droplet
+          register: droplet
 
         - debug:
-            msg: "ID is {{ droplet.droplet.id }}"
+            msg: "ID is {{ droplet.ssh_key.id }}"
 
-        - debug:
-            msg: "IP is {{ droplet.droplet.ip_address }}"
+        #- debug:
+            #msg: "IP is {{ droplet.droplet.ip_address }}"

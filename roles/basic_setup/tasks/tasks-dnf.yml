@@ -1,0 +1,11 @@
+---
+# Fedora-specific tasks
+- name: Installing packages via DNF
+  dnf:
+    name:
+      - vim
+      - tmux
+      - git
+      - wget
+      - mtr
+      - libselinux-python
