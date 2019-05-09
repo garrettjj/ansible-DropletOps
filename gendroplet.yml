@@ -25,6 +25,9 @@
   hosts: server
   user: root
 
+  vars_files:
+    - vars/private.yml
+
   tasks:
     - name: Including 'basic_setup' role
       include_role:
