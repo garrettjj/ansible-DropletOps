@@ -55,8 +55,3 @@
 - name: Configure SSH daemon
   copy: src=ssh/sshd_config dest=/etc/ssh/sshd_config
   notify: restart ssh
-
-- name: restart ssh
-  service: 
-    name: sshd
-    state: restarted
