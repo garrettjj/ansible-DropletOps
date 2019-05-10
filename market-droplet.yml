@@ -20,15 +20,3 @@
     - name: Including 'digital_ocean' role
       include_role:
         name: digital_ocean
-
-- name: Perform initial setup of Droplet
-  hosts: server
-  user: root
-
-  vars_files:
-    - vars/private.yml
-
-  tasks:
-    - name: Including 'basic_setup' role
-      include_role:
-        name: basic_setup

@@ -1,0 +1,34 @@
+---
+# Testing a full run of the SSH & Droplet creation script
+#
+# Requires:
+#       * dopy (>= Python 3.5)
+
+- name: Generating a single Droplet
+  hosts: localhost
+  connection: local
+  become: no
+
+  vars_files:
+    - vars/private.yml
+
+  tasks:
+    - name: Fail if server_hostname is not set
+      fail: msg="server_hostname needs to be defined vars/private.yml or via command line, e.g. --extra-vars server_hostname=$name"
+      when: server_hostname is not defined
+
+    - name: Including 'digital_ocean' role
+      include_role:
+        name: digital_ocean
+
+- name: Perform initial setup of Droplet
+  hosts: server
+  user: root
+
+  vars_files:
+    - vars/private.yml
+
+  tasks:
+    - name: Including 'basic_setup' role
+      include_role:
+        name: basic_setup
