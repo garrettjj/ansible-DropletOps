@@ -1,7 +1,7 @@
 ---
 # Fedora-specific tasks
 - name: Installing packages via YUM
-  dnf:
+  yum:
     name:
       - vim
       - tmux
@@ -9,3 +9,4 @@
       - wget
       - mtr
       - libselinux-python
+      - epel-release
