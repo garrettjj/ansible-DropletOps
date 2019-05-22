@@ -9,3 +9,4 @@
       - wget
       - mtr
       - libselinux-python
+      - bind-utils
