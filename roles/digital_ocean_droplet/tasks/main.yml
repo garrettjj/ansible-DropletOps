@@ -1,0 +1,48 @@
+#---
+# tasks file for digital_ocean
+
+- name: Check if vars/private.yml is present
+  stat: path={{ role_path }}/vars/private.yml
+  register: private_vars
+
+- name: Include private variables
+  include_vars:
+    file: vars/private.yml
+  when: private_vars.stat.exists == true
+
+- name: Create a new droplet
+  digital_ocean_droplet:
+    state: present
+    name: "{{ server_hostname }}.{{ server_domain }}"
+    oauth_token: "{{ do_api_token }}"
+    size: "{{ do_size_id }}"
+    region: "{{ do_region_id }}"
+    image: "{{ do_image_id }}"
+    wait_timeout: 500
+    ssh_key: "{{ do_ssh_keys }}" # + [ '{{ droplet.ssh_key.id }}' ]"
+  register: droplet
+
+- debug:
+    msg: "Droplet IP is {{ droplet.data.ip_address }}"
+
+- name: Adding new Droplet to in-memory inventory
+  add_host:
+    hostname: "{{ droplet.data.ip_address }}"
+    groups: server
+    #ansible_ssh_host: "{{ droplet.droplet.ip_address }} "
+    ansible_python_interpreter: /usr/bin/{{ python_ver }}
+    ansible_ssh_user: root
+    ansible_ssh_private_key_file: "{{ lookup('file', '~/.ssh/id_rsa') }}"
+    ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
+  changed_when: false
+
+- name: Creating a DNS entry for Droplet
+  command: bash {{ role_path }}/files/dns/add-record.sh "{{ server_domain }}" "{{ server_hostname }}" "{{ droplet.droplet.ip_address }}" "{{ do_api_token }}"
+  ignore_errors: yes
+  no_log: True
+
+- name: Waiting for port 22 to respond
+  wait_for:
+    state: started
+    host: "{{ droplet.data.ip_address }}"
+    port: 22

@@ -1,3 +1,4 @@
 [submodule "roles/digital_ocean"]
 	path = roles/digital_ocean
 	url = https://github.com/garrettjj/ansible-digital_ocean.git
+	branch = master
