@@ -1,5 +1,5 @@
 #---
-# tasks file for digital_ocean
+# tasks file for digital_ocean_droplet
 
 - name: Check if vars/private.yml is present
   stat: path={{ role_path }}/vars/private.yml
@@ -19,7 +19,9 @@
     region: "{{ do_region_id }}"
     image: "{{ do_image_id }}"
     wait_timeout: 500
-    ssh_key: "{{ do_ssh_keys }}" # + [ '{{ droplet.ssh_key.id }}' ]"
+    private_networking: yes
+    ipv6: yes
+    ssh_keys: "{{ do_ssh_keys }}" # + [ '{{ droplet.ssh_key.id }}' ]"
   register: droplet
 
 - debug:
