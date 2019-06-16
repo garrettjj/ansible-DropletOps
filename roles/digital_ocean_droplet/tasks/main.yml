@@ -41,7 +41,7 @@
 - name: Creating a DNS entry for Droplet
   command: bash {{ role_path }}/files/dns/add-record.sh "{{ server_domain }}" "{{ server_hostname }}" "{{ droplet.droplet.ip_address }}" "{{ do_api_token }}"
   ignore_errors: yes
-  no_log: True
+  #no_log: True
 
 - name: Waiting for port 22 to respond
   wait_for:
