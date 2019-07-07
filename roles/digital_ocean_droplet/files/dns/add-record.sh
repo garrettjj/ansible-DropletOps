@@ -18,7 +18,7 @@ curl -X POST \
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $do_api_token" \
   "https://api.digitalocean.com/v2/domains" \
-  -d "$(generate_domain_data)" | jq
+  -d "$(generate_domain_data)"
 
 printf "Creating A record for new Droplet..."
 
@@ -33,4 +33,4 @@ curl -X POST \
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $do_api_token" \
   "https://api.digitalocean.com/v2/domains/$server_domain/records" \
-  -d "$(generate_record_data)" | jq
+  -d "$(generate_record_data)"

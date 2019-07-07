@@ -17,9 +17,9 @@
       fail: msg="server_hostname needs to be defined vars/private.yml or via command line, e.g. --extra-vars server_hostname=$name"
       when: server_hostname is not defined
 
-    - name: Including 'digital_ocean' role
+    - name: Including 'digital_ocean_droplet' role
       include_role:
-        name: digital_ocean
+        name: digital_ocean_droplet
 
 - name: Perform initial setup of Droplet
   hosts: server
