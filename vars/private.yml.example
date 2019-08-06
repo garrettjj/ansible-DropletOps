@@ -10,3 +10,9 @@ do_size_id: s-1vcpu-1gb
 do_region_id: nyc3
 do_image_id: fedora-30-x64
 do_ssh_keys: 24116044,24331192
+
+normal_user_name:
+# Hashed value via passlib 
+# `python -c "from passlib.hash import sha512_crypt; print(sha512_crypt.hash('$PASSWORD'))"`
+normal_user_password:
+github_user_name:
