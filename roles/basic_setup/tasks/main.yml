@@ -44,8 +44,11 @@
        password='{{ normal_user_password }}'
        shell=/bin/bash
 
-- name: Add remote authorized key to allow future passwordless logins
-  authorized_key: user={{ normal_user_name }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+- name: Add authorized SSH keys via a GitHub public profile
+  authorized_key:
+    user: "{{ normal_user name }}"
+    state: present
+    key: "https://github.com/{{ github_user_name }}.keys"
 
 - name: Add normal user to sudoers
   lineinfile: dest=/etc/sudoers
