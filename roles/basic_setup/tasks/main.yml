@@ -46,7 +46,7 @@
 
 - name: Add authorized SSH keys via a GitHub public profile
   authorized_key:
-    user: "{{ normal_user name }}"
+    user: "{{ normal_user_name }}"
     state: present
     key: "https://github.com/{{ github_user_name }}.keys"
 
