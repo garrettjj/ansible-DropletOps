@@ -10,3 +10,4 @@
       - mtr
       - libselinux-python
       - bind-utils
+      - sysstat

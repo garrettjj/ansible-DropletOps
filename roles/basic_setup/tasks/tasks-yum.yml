@@ -1,5 +1,5 @@
 ---
-# Fedora-specific tasks
+# CentOS-specific tasks
 - name: Installing packages via YUM
   yum:
     name:
@@ -11,3 +11,4 @@
       - libselinux-python
       - epel-release
       - bind-utils
+      - sysstat

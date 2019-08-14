@@ -1,0 +1,12 @@
+---
+# Ubuntu/Debian-specific tasks
+- name: Installing packages via APT
+  apt:
+    name:
+      - vim
+      - tmux
+      - git
+      - wget
+      - mtr
+      - dnsutils
+      - sysstat
