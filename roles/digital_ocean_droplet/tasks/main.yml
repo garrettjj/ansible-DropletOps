@@ -38,6 +38,9 @@
     ansible_ssh_extra_args: "-o StrictHostKeyChecking=no"
   changed_when: false
 
+- set_fact: dns_entry=False
+  when: dns_entry is undefined
+
 - name: Creating a DNS entry for Droplet
   command: bash {{ role_path }}/files/dns/add-record.sh "{{ server_domain }}" "{{ server_hostname }}" "{{ droplet.data.ip_address }}" "{{ do_api_token }}"
   when: dns_entry | bool
