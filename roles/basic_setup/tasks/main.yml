@@ -44,8 +44,8 @@
        password='{{ normal_user_password }}'
        shell=/bin/bash
 
-       #- name: Add remote authorized key to allow future passwordless logins
-       #authorized_key: user={{ normal_user_name }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+#- name: Add remote authorized key to allow future passwordless logins
+#authorized_key: user={{ normal_user_name }} key="{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
 
 - name: Install all needed remote authorized keys from GitHub public profile
   authorized_key:

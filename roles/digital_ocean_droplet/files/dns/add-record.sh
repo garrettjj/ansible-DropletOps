@@ -14,7 +14,7 @@ generate_domain_data()
 EOF
 }
 
-curl -X POST \
+curl -s -X POST \
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $do_api_token" \
   "https://api.digitalocean.com/v2/domains" \
@@ -29,7 +29,7 @@ generate_record_data()
 EOF
 }
 
-curl -X POST \
+curl -s -X POST \
   -H 'Content-Type: application/json' \
   -H "Authorization: Bearer $do_api_token" \
   "https://api.digitalocean.com/v2/domains/$server_domain/records" \
